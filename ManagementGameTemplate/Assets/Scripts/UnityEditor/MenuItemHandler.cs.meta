@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: a590a1a21692a1c40b4b813b578698b7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - UIBackgroundColorObj: {fileID: 1041852579007032879, guid: 1f882a8411457194f85b59ddeec7471f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
