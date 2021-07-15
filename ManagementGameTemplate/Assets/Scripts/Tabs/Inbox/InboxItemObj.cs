@@ -10,16 +10,18 @@ namespace LoreMill
     {
         public InboxItem InboxItem;
 
-        private Button button;
-        private Text titleText;
-        private Text messageBoxText;
+        private Button _hiddenInboxOpenButton;
+        private Button _button;
+        private Text _titleText;
+        private Text _messageBoxText;
+        private Text _messageBoxHeader;
 
         private void Awake()
         {
-            button = GetComponent<Button>();
-            button.onClick.AddListener(() => Select());
+            _button = GetComponent<Button>();
 
             transform.Find("BackgroundColour").GetComponent<Image>().color = UIStyleManager.GetInboxItemUnselected;
+            _hiddenInboxOpenButton = GameObject.Find("InboxButton").GetComponent<Button>();
         }
 
         private void OnValidate()
@@ -36,22 +38,36 @@ namespace LoreMill
 
         public void Select()
         {
-            if (messageBoxText == null)
-            {
-                messageBoxText = GameObject.Find("MessageBox").transform.Find("TextBox").GetComponent<Text>();
-            }
-            messageBoxText.text = InboxItem.Text;
+            if(InboxItemHandler.instance.IsSelectedItemClicked(transform))
+                _hiddenInboxOpenButton.onClick.Invoke();
 
-            InboxItemHandler.instance.SetNewSelectedItem(transform);
+            if (_messageBoxText == null)
+            {
+                _messageBoxText = GameObject.Find("InboxItemBody").transform.Find("Text").GetComponent<Text>();
+                _messageBoxHeader = GameObject.Find("InboxItemHeader").GetComponent<Text>();
+            }
+            _messageBoxText.text = InboxItem.Text;
+            _messageBoxHeader.text = InboxItem.Title;
+
+            if(InboxItem.InboxItemResponses.Count < 1)
+            {
+                InboxResponseHandler.instance.HideResponses();
+            }
+            else
+            {
+                InboxResponseHandler.instance.ShowResponses(InboxItem.InboxItemResponses);
+            }
+
+            InboxItemHandler.instance.SetNewSelectedItem(transform, InboxItem);
         }
 
         public void Setup(InboxItem item)
         {
             InboxItem = item;
 
-            titleText = transform.Find("Title").GetComponent<Text>();
+            _titleText = transform.Find("Title").GetComponent<Text>();
 
-            titleText.text = InboxItem.Title;
+            _titleText.text = InboxItem.Title;
         }
     }
 }

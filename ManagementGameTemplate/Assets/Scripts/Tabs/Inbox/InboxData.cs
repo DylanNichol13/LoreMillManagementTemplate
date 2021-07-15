@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace LoreMill
@@ -9,6 +10,8 @@ namespace LoreMill
         public static InboxData instance;
         public List<InboxItem> InboxItemData = new List<InboxItem>();
 
+        private List<InboxItem> _renderInboxList = new List<InboxItem>();
+
         private void Awake()
         {
             instance = this;
@@ -16,9 +19,45 @@ namespace LoreMill
 
         private void Start()
         {
-            InboxItemData.Add(new InboxItem("Lorem ipsum dolor sit amet",
-                "Ut in eros eu velit eleifend varius ut nec sapien. In venenatis egestas dolor pellentesque porttitor. Morbi condimentum sem ac suscipit auctor.\n\n Mauris consequat nibh vulputate risus viverra dapibus. Aenean ultrices posuere justo sed accumsan. Integer est urna, aliquam vel lorem eget, porta malesuada sapien. Vivamus tempor lorem vel dolor vestibulum sollicitudin.\n\nMaecenas interdum cursus tincidunt.Morbi ornare ligula felis, sed rutrum purus ornare ut.Quisque vulputate euismod finibus.Nam mauris mi, dignissim ac ex at, dictum pretium mauris.Mauris vel orci vulputate, placerat velit vitae, pulvinar erat.Mauris consequat, ante eget sagittis vehicula, risus ante sagittis augue, et malesuada dui ante a felis."));
-            InboxItemData.Add(new InboxItem("Ut in eros eu velit eleifend varius ut nec sapien", "Vestibulum et nibh nec massa dignissim dictum. Duis pretium nunc eget commodo eleifend. Etiam at neque justo. Phasellus tincidunt vulputate nibh, sit amet dictum lorem dignissim ut.\n\n Morbi luctus turpis eget ipsum varius, vel gravida urna pulvinar. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus ut lacus dignissim, laoreet dolor ut, ullamcorper ligula.\n\n Curabitur vel ante rutrum, gravida metus vel, molestie nisl. Pellentesque dui augue, mattis eu hendrerit a, ornare sit amet nisi."));
+            AddTestData(2);
         }
+
+        private void AddNewInboxItem(InboxItem item)
+        {
+            InboxItemData.Add(item);
+
+            //Refresh
+            RefreshInbox();
+        }
+
+        private void AddTestData(int v)
+        {
+            for(int i = 0; i < v; i++) {
+                AddNewInboxItem(new InboxItem($"Random message {InboxItemData.Count}", $"This is a new message, number {InboxItemData.Count}"));
+                AddNewInboxItem(new InboxItem($"Random message {InboxItemData.Count}", $"This is a new message, number {InboxItemData.Count}", new List<InboxResponse>
+                {
+                    new InboxResponse("Response one"),
+                    new InboxResponse("Response two")
+                }));
+            }
+        }
+
+
+        public void Test_AddData()
+        {
+            AddTestData(Random.Range(1, 4));
+        }
+
+        public void RefreshInbox()
+        {
+            _renderInboxList = InboxItemData.OrderBy(x => x.GetTimeCreated()).Take(6).Reverse().ToList();
+
+            InboxItemHandler.instance.SetupInbox(_renderInboxList);
+        }
+
+        public void RemoveData(InboxItem data)
+        {
+            InboxItemData.Remove(data);
+        } 
     }
 }

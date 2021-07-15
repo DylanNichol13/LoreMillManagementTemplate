@@ -18,6 +18,7 @@ namespace LoreMill
 
             if (NavBarButton != null)
             {
+                NavBarButton.onClick.RemoveAllListeners();
                 NavBarButton.onClick.AddListener(() => ChangeTab());
                 NavBarButton.onClick.AddListener(() => TabBehaviour());
             }
@@ -27,14 +28,18 @@ namespace LoreMill
         {
             switch (TabType)
             {
+                case TabType.Inbox:
+                    //Clear selected navbar style when selected a news item 
+                    NavBarButton.GetComponent<SpriteTextButton>().ClearOtherButtons();
+                    break;
                 case TabType.Profile:
                     ProfileHandler.instance.SetupProfile();
                     break;
-                case TabType.Inbox:
-                    InboxItemHandler.instance.SetupInbox();
-                    break;
                 case TabType.Finance:
 
+                    break;
+                case TabType.Log:
+                    LogHandler.instance.SetupLog();
                     break;
             }
         }

@@ -51,18 +51,25 @@ IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandle
         public void OnPointerDown(PointerEventData eventData)
         {
             ClearOtherButtons();
-            if (tracking && inBounds && button.onClick != null) button.onClick.Invoke();
             tracking = true;
             inBounds = true;
-            selected = true;
             UpdateStyle();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            tracking = false;
-            inBounds = false;
-            UpdateStyle();
+            if (selected && inBounds)
+            {
+                selected = false;
+                Deselect();
+            }
+            else if (tracking && inBounds && button.onClick != null)
+            {
+                tracking = false;
+                inBounds = false;
+                selected = true;
+                UpdateStyle();
+            }
         }
         #endregion
         //--------------------------------------------------------------------------------
@@ -89,13 +96,16 @@ IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandle
             }
         }
 
-        private void ClearOtherButtons()
+        public void ClearOtherButtons()
         {
             foreach (Transform t in transform.parent)
             {
                 try
                 {
-                    t.GetComponent<SpriteTextButton>().Deselect();
+                    if (t.gameObject != this.gameObject)
+                    {
+                        t.GetComponent<SpriteTextButton>().Deselect();
+                    }
                 }
                 catch (Exception ex)
                 {

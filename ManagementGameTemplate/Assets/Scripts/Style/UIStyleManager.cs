@@ -120,6 +120,8 @@ namespace LoreMill
                     return GetTextButtonUnselected;
                 case UIColorType.TextButtonSelected:
                     return GetTextButtonSelected;
+                case UIColorType.Invis:
+                    return new Color(0, 0, 0, 0);
                 default:
                     return Color.green;
             }

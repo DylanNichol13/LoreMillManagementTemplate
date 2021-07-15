@@ -12,6 +12,9 @@ namespace LoreMill
         public void Continue()
         {
             Debug.Log("Continue button pressed");
+
+            //Add test data
+            InboxData.instance.Test_AddData();
         }
     }
 }

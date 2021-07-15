@@ -13,18 +13,25 @@ namespace LoreMill
         ButtonSelected,
         ButtonSpecial,
         TextButtonUnselected,
-        TextButtonSelected
+        TextButtonSelected,
+        Invis
     }
     public enum TabType
     {
         Inbox,
         Profile,
-        Finance
+        Finance,
+        Log
     }
     public enum ProfileElementType
     {
         Name,
         DobAge,
         ProfileImage
+    }
+    public enum InboxItemResponse
+    {
+        ResponseA,
+        ResponseB
     }
 }
